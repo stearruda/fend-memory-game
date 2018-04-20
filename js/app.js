@@ -39,16 +39,12 @@ function shuffle(array) {
 
 const cards = document.getElementsByClassName('card');
 
-function flip() {
-	// If statement + setAttribute
-	/* 
-	if (cards[0].classList.contains('card')) {
-		cards[0].setAttribute('class', 'card open show');
-		console.log('works');
-	}*/
-
-	cards[0].classList.toggle('open');
-	cards[0].classList.toggle('show');
+function flip(e) {
+	e.target.classList.toggle('open');
+	e.target.classList.toggle('show');
 }
 
-cards[0].addEventListener('click', flip);
+for (let i = 0; i < cards.length; i++) {
+	cards[i].addEventListener('click', flip);
+}
+
