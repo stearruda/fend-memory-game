@@ -2,6 +2,8 @@
  * Create a list that holds all of your cards
  */
 
+let symbols = ['diamond', 'paper-plane-o', 'anchor', 'bolt', 'cube', 'leaf', 'bicycle', 'bomb'];
+let cards = [...symbols, ...symbols];
 
 /*
  * Display the cards on the page
@@ -25,6 +27,37 @@ function shuffle(array) {
     return array;
 }
 
+/* 
+* * CLICK * * 
+*/
+
+function onCardClick(e){
+	e.target.classList.toggle('open');
+	e.target.classList.toggle('show');
+}
+
+
+/* 
+* * RESET/START * * 
+*/
+
+function restart(){
+	cards = shuffle(cards);
+	//console.log(cards);
+	let deckUl = document.querySelector('ul.deck');
+	deckUl.innerHTML = '';
+	for(card of cards){
+		let cardLi = document.createElement('li');
+		cardLi.setAttribute('class', 'card');
+		cardLi.innerHTML = '<i class="fa fa-' + card + '"></i>';
+		cardLi.addEventListener('click', onCardClick);
+		deckUl.appendChild(cardLi);
+	}
+}
+
+
+window.onload = restart;
+
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -36,15 +69,53 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+/*
+let firstLiSelected;
+let firstSelection;
+let secondSelection;
 
-const cards = document.getElementsByClassName('card');
 
 function flip(e) {
 	e.target.classList.toggle('open');
 	e.target.classList.toggle('show');
+
+	let quantidadeDeAbertos = 0;
+
+	for (let j = 0; j < cards.length; j++) {
+		let cardAtualAberto = cards[j].classList.contains('open');
+		if(cardAtualAberto) {
+			quantidadeDeAbertos++;
+		}
+		//console.log('card ' + j + ' está aberto ' + cardAtualAberto);
+	}
+	//console.log('Quantidade de abertos é ' + quantidadeDeAbertos);
+
+	let currentSelection = e.target.getElementsByTagName('i')[0].getAttribute('class');
+
+	if (quantidadeDeAbertos === 1) {
+		firstLiSelected = e.target;
+		firstSelection = currentSelection;
+	} else if (quantidadeDeAbertos === 2) {
+		secondSelection = currentSelection;
+	}
+	//console.log('First Selection is ' + firstSelection);
+	//console.log('and Second Selection is ' + secondSelection);
+
+	if (quantidadeDeAbertos === 2) {
+		//console.log('vou fazer match');
+		if (firstSelection === secondSelection) {
+			e.target.classList.add('match');
+			firstLiSelected.classList.add('match');
+			console.log('deu match!');
+		} else {
+			
+			console.log('não deu match');
+		}
+	}
 }
+
 
 for (let i = 0; i < cards.length; i++) {
 	cards[i].addEventListener('click', flip);
 }
-
+*/
