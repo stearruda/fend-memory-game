@@ -1,9 +1,18 @@
 /*
- * Create a list that holds all of your cards
+ * GLOBAL VARIABLES
  */
 
+// list of symbols used: 8
 let symbols = ['diamond', 'paper-plane-o', 'anchor', 'bolt', 'cube', 'leaf', 'bicycle', 'bomb'];
+// cards of the deck: 16
 let cards = [...symbols, ...symbols];
+// 
+let firstCardOpened = null;
+// check if we are showing an unmatched pair to the user
+let showingUnmatchedCards = false;
+//
+let matchedCards = [];
+
 
 /*
  * Display the cards on the page
@@ -31,9 +40,57 @@ function shuffle(array) {
 * * CLICK * * 
 */
 
-function onCardClick(e){
-	e.target.classList.toggle('open');
-	e.target.classList.toggle('show');
+function onCardClick(e, index){
+	if (!matchedCards.includes(index)) {
+		if(showingUnmatchedCards === false) {
+			if (firstCardOpened != index) {
+				e.target.classList.toggle('open');
+				e.target.classList.toggle('show');
+				if (firstCardOpened != null) {
+					if (cards[index] === cards[firstCardOpened]) {
+						match(index);
+					} else {
+						unmatch(index);
+					}
+				} else {
+					firstCardOpened = index;
+				}
+			}
+		}
+	}
+}
+
+/* 
+* * MATCH * * 
+*/
+
+function match(secondCardOpened){
+	console.log('match!');
+	let cardElements = document.querySelectorAll('li.card');
+	cardElements[firstCardOpened].classList.add('match');
+	cardElements[secondCardOpened].classList.add('match');
+	cardElements[firstCardOpened].classList.remove('show', 'open');
+	cardElements[secondCardOpened].classList.remove('show', 'open');
+	matchedCards.push(firstCardOpened);
+	matchedCards.push(secondCardOpened);
+	firstCardOpened = null;
+}
+
+/* 
+* * UNMATCH * * 
+*/
+
+function unmatch(secondCardOpened){
+	console.log('no match!');
+	showingUnmatchedCards = true;
+	setTimeout(function(){
+		let cardElements = document.querySelectorAll('li.card');
+        cardElements[firstCardOpened].classList.remove('show', 'open');
+        cardElements[secondCardOpened].classList.remove('show', 'open');
+        firstCardOpened = null;
+        showingUnmatchedCards = false;
+    },1100);
+
 }
 
 
@@ -43,14 +100,18 @@ function onCardClick(e){
 
 function restart(){
 	cards = shuffle(cards);
-	//console.log(cards);
+	//console.log(shuffledCards);
 	let deckUl = document.querySelector('ul.deck');
 	deckUl.innerHTML = '';
-	for(card of cards){
+	for (let i = 0; i < cards.length; i++){
+		let card = cards[i];
 		let cardLi = document.createElement('li');
 		cardLi.setAttribute('class', 'card');
 		cardLi.innerHTML = '<i class="fa fa-' + card + '"></i>';
-		cardLi.addEventListener('click', onCardClick);
+		let cardClicked = function(e){
+			onCardClick(e, i);
+		}
+		cardLi.addEventListener('click', cardClicked);
 		deckUl.appendChild(cardLi);
 	}
 }
