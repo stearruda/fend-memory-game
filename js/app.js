@@ -12,6 +12,8 @@ let firstCardOpened = null;
 let showingUnmatchedCards = false;
 //
 let matchedCards = [];
+//
+let moveCounter = 1;
 
 
 /*
@@ -36,6 +38,22 @@ function shuffle(array) {
     return array;
 }
 
+// timer
+function timer(){
+	let min = 0;
+	let sec = 0;
+	let timer = setInterval(function(){
+    	document.getElementById('timer').innerHTML = `${min} : ${sec}`;
+    	sec++;
+    	if (sec > 59) {
+        	sec = 0;
+        	min++;
+    	}
+
+	}, 1000);
+}
+
+
 /* 
 * * CLICK * * 
 */
@@ -58,6 +76,28 @@ function onCardClick(e, index){
 			}
 		}
 	}
+
+	// counts the moves
+	let counter = document.querySelector('span.moves');
+	let moves = moveCounter++;
+	counter.textContent = moves;
+	debugger;
+
+	// star rating
+	let starPanel = document.querySelectorAll('ul.stars li i');
+
+	if (moves === 12) {
+		starPanel[2].setAttribute('class', 'fa fa-star-o');
+		console.log('2 stars!');
+	} else if (moves === 22) {
+		starPanel[1].setAttribute('class', 'fa fa-star-o');
+		console.log('1 star!');
+	} else if (moves === 32) {
+		starPanel[0].setAttribute('class', 'fa fa-star-o');
+		console.log('Game over! Try Again!');
+	}
+
+	
 }
 
 /* 
@@ -103,6 +143,7 @@ function restart(){
 	//console.log(shuffledCards);
 	let deckUl = document.querySelector('ul.deck');
 	deckUl.innerHTML = '';
+
 	for (let i = 0; i < cards.length; i++){
 		let card = cards[i];
 		let cardLi = document.createElement('li');
@@ -114,6 +155,9 @@ function restart(){
 		cardLi.addEventListener('click', cardClicked);
 		deckUl.appendChild(cardLi);
 	}
+
+
+	return timer();
 }
 
 
@@ -130,53 +174,3 @@ window.onload = restart;
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-/*
-let firstLiSelected;
-let firstSelection;
-let secondSelection;
-
-
-function flip(e) {
-	e.target.classList.toggle('open');
-	e.target.classList.toggle('show');
-
-	let quantidadeDeAbertos = 0;
-
-	for (let j = 0; j < cards.length; j++) {
-		let cardAtualAberto = cards[j].classList.contains('open');
-		if(cardAtualAberto) {
-			quantidadeDeAbertos++;
-		}
-		//console.log('card ' + j + ' está aberto ' + cardAtualAberto);
-	}
-	//console.log('Quantidade de abertos é ' + quantidadeDeAbertos);
-
-	let currentSelection = e.target.getElementsByTagName('i')[0].getAttribute('class');
-
-	if (quantidadeDeAbertos === 1) {
-		firstLiSelected = e.target;
-		firstSelection = currentSelection;
-	} else if (quantidadeDeAbertos === 2) {
-		secondSelection = currentSelection;
-	}
-	//console.log('First Selection is ' + firstSelection);
-	//console.log('and Second Selection is ' + secondSelection);
-
-	if (quantidadeDeAbertos === 2) {
-		//console.log('vou fazer match');
-		if (firstSelection === secondSelection) {
-			e.target.classList.add('match');
-			firstLiSelected.classList.add('match');
-			console.log('deu match!');
-		} else {
-			
-			console.log('não deu match');
-		}
-	}
-}
-
-
-for (let i = 0; i < cards.length; i++) {
-	cards[i].addEventListener('click', flip);
-}
-*/
