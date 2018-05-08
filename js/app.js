@@ -43,7 +43,7 @@ function timer(){
 	let min = 0;
 	let sec = 0;
 	let timer = setInterval(function(){
-    	document.getElementById('timer').innerHTML = `${min} : ${sec}`;
+    	document.getElementById('timer').innerHTML = `${('0' + min).slice(-2)} : ${('0' + sec).slice(-2)}`;
     	sec++;
     	if (sec > 59) {
         	sec = 0;
