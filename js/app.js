@@ -14,6 +14,11 @@ let showingUnmatchedCards = false;
 let matchedCards = [];
 //
 let moveCounter = 1;
+//
+let timerStarted = false;
+//
+let timerId;
+
 
 
 /*
@@ -39,19 +44,20 @@ function shuffle(array) {
 }
 
 // timer
-function timer(){
+function scheduleTimer(){
 	let min = 0;
 	let sec = 0;
-	let timer = setInterval(function(){
+	timerId = setInterval(function(){
     	document.getElementById('timer').innerHTML = `${('0' + min).slice(-2)} : ${('0' + sec).slice(-2)}`;
     	sec++;
     	if (sec > 59) {
         	sec = 0;
         	min++;
     	}
-
 	}, 1000);
 }
+
+
 
 
 /* 
@@ -59,6 +65,13 @@ function timer(){
 */
 
 function onCardClick(e, index){
+	if (!timerStarted) {
+		// timer starts
+		scheduleTimer();
+		timerStarted = true;
+	} 
+	
+
 	if (!matchedCards.includes(index)) {
 		if(showingUnmatchedCards === false) {
 			if (firstCardOpened != index) {
@@ -81,7 +94,6 @@ function onCardClick(e, index){
 	let counter = document.querySelector('span.moves');
 	let moves = moveCounter++;
 	counter.textContent = moves;
-	debugger;
 
 	// star rating
 	let starPanel = document.querySelectorAll('ul.stars li i');
@@ -97,7 +109,7 @@ function onCardClick(e, index){
 		console.log('Game over! Try Again!');
 	}
 
-	
+
 }
 
 /* 
@@ -156,9 +168,18 @@ function restart(){
 		deckUl.appendChild(cardLi);
 	}
 
-
-	return timer();
+	//clear timer
+	clearInterval(timerId);
+	document.getElementById('timer').innerHTML = `00 : 00`;
+	timerStarted = false;
 }
+
+// restart button
+let restartButton = document.querySelector('.restart i');
+restartButton.addEventListener('click', function(){
+	restart();
+	console.log('Restart!');
+})
 
 
 window.onload = restart;
