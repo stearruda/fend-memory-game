@@ -13,6 +13,8 @@ let showingUnmatchedCards = false;
 //
 let matchedCards = [];
 //
+let moves;
+//
 let moveCounter = 1;
 //
 let timerStarted = false;
@@ -82,6 +84,11 @@ function onCardClick(e, index){
 						match(index);
 					} else {
 						unmatch(index);
+						debugger;
+						// counts the moves
+						let counter = document.querySelector('span.moves');
+						moves = moveCounter++;
+						counter.textContent = moves;
 					}
 				} else {
 					firstCardOpened = index;
@@ -90,10 +97,6 @@ function onCardClick(e, index){
 		}
 	}
 
-	// counts the moves
-	let counter = document.querySelector('span.moves');
-	let moves = moveCounter++;
-	counter.textContent = moves;
 
 	// star rating
 	let starPanel = document.querySelectorAll('ul.stars li i');
