@@ -183,6 +183,9 @@ function restart(){
 	//clear moves
 	moveCounter = 1;
 	counterBox.innerHTML = `0`;
+
+	//Cards that were matched before now can be clicked
+	matchedCards = [];
 }
 
 // restart button
