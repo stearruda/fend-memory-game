@@ -13,6 +13,8 @@ let showingUnmatchedCards = false;
 //
 let matchedCards = [];
 //
+let counterBox = document.querySelector('span.moves');
+//
 let moves;
 //
 let moveCounter = 1;
@@ -59,6 +61,11 @@ function scheduleTimer(){
 	}, 1000);
 }
 
+//counter
+function counter(){
+	moves = moveCounter++;
+	counterBox.innerHTML = moves;
+}
 
 
 
@@ -84,11 +91,9 @@ function onCardClick(e, index){
 						match(index);
 					} else {
 						unmatch(index);
-						debugger;
 						// counts the moves
-						let counter = document.querySelector('span.moves');
-						moves = moveCounter++;
-						counter.textContent = moves;
+						counter();
+						console.log(moves);
 					}
 				} else {
 					firstCardOpened = index;
@@ -100,7 +105,6 @@ function onCardClick(e, index){
 
 	// star rating
 	let starPanel = document.querySelectorAll('ul.stars li i');
-
 	if (moves === 12) {
 		starPanel[2].setAttribute('class', 'fa fa-star-o');
 		console.log('2 stars!');
@@ -175,6 +179,10 @@ function restart(){
 	clearInterval(timerId);
 	document.getElementById('timer').innerHTML = `00 : 00`;
 	timerStarted = false;
+
+	//clear moves
+	moveCounter = 1;
+	counterBox.innerHTML = `0`;
 }
 
 // restart button
