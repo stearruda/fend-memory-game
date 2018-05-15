@@ -4,6 +4,8 @@
 
 // list of symbols used: 8
 let symbols = ['diamond', 'paper-plane-o', 'anchor', 'bolt', 'cube', 'leaf', 'bicycle', 'bomb'];
+// TESTE PARA END GAME >>> RETIRAR APÓS TESTE
+//symbols = ['diamond', 'anchor'];
 // cards of the deck: 16
 let cards = [...symbols, ...symbols];
 // 
@@ -13,16 +15,15 @@ let showingUnmatchedCards = false;
 //
 let matchedCards = [];
 //
-let counterBox = document.querySelector('span.moves');
+let counterBox = document.querySelector('.score-panel span.moves');
 //
-let moves;
-//
-let moveCounter = 1;
+let moves = 0;
 //
 let timerStarted = false;
 //
 let timerId;
-
+//
+let starPanel = document.querySelectorAll('ul.stars li i');
 
 
 /*
@@ -32,6 +33,10 @@ let timerId;
  *   - add each card's HTML to the page
  */
 
+
+/* 
+* * SHUFFLE CARDS * * 
+*/
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -47,7 +52,10 @@ function shuffle(array) {
     return array;
 }
 
-// timer
+
+/* 
+* * TIMER * * 
+*/
 function scheduleTimer(){
 	let min = 0;
 	let sec = 0;
@@ -61,12 +69,54 @@ function scheduleTimer(){
 	}, 1000);
 }
 
-//counter
-function counter(){
-	moves = moveCounter++;
+
+/* 
+* * COUNTER * * 
+*/
+//old counter()
+function countMove(){
+	moves++;
 	counterBox.innerHTML = moves;
 }
 
+
+/* 
+* * STAR RATING * * 
+*/
+
+function showStars() {
+	starPanel[2].setAttribute('class', 'fa fa-star');
+	starPanel[1].setAttribute('class', 'fa fa-star');
+	starPanel[0].setAttribute('class', 'fa fa-star');
+
+	let stars = calculateStars();
+
+	if (stars < 3) {
+		starPanel[2].setAttribute('class', 'fa fa-star-o');
+	}
+
+	if (stars < 2) {
+		starPanel[1].setAttribute('class', 'fa fa-star-o');
+	}
+
+	if (stars < 1) {
+		starPanel[0].setAttribute('class', 'fa fa-star-o');
+	}
+}
+
+
+function calculateStars() {
+	debugger;
+	if (moves >= 0 && moves < 12) {
+		return 3;
+	} else if (moves < 22) {
+		return 2;
+	} else if (moves < 32) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
 
 
 /* 
@@ -79,7 +129,6 @@ function onCardClick(e, index){
 		scheduleTimer();
 		timerStarted = true;
 	} 
-	
 
 	if (!matchedCards.includes(index)) {
 		if(showingUnmatchedCards === false) {
@@ -92,8 +141,8 @@ function onCardClick(e, index){
 					} else {
 						unmatch(index);
 						// counts the moves
-						counter();
-						console.log(moves);
+						countMove();
+						console.log(`${moves} moves`);
 					}
 				} else {
 					firstCardOpened = index;
@@ -102,27 +151,19 @@ function onCardClick(e, index){
 		}
 	}
 
+	// how many stars during the game
+	showStars();
 
-	// star rating
-	let starPanel = document.querySelectorAll('ul.stars li i');
-	if (moves === 12) {
-		starPanel[2].setAttribute('class', 'fa fa-star-o');
-		console.log('2 stars!');
-	} else if (moves === 22) {
-		starPanel[1].setAttribute('class', 'fa fa-star-o');
-		console.log('1 star!');
-	} else if (moves === 32) {
-		starPanel[0].setAttribute('class', 'fa fa-star-o');
-		console.log('Game over! Try Again!');
+	//ending game
+	if (matchedCards.length === cards.length) {
+		endGame();
 	}
-
-
 }
+
 
 /* 
 * * MATCH * * 
 */
-
 function match(secondCardOpened){
 	console.log('match!');
 	let cardElements = document.querySelectorAll('li.card');
@@ -135,10 +176,10 @@ function match(secondCardOpened){
 	firstCardOpened = null;
 }
 
+
 /* 
 * * UNMATCH * * 
 */
-
 function unmatch(secondCardOpened){
 	console.log('no match!');
 	showingUnmatchedCards = true;
@@ -156,7 +197,6 @@ function unmatch(secondCardOpened){
 /* 
 * * RESET/START * * 
 */
-
 function restart(){
 	cards = shuffle(cards);
 	//console.log(shuffledCards);
@@ -181,20 +221,32 @@ function restart(){
 	timerStarted = false;
 
 	//clear moves
-	moveCounter = 1;
+	moves = 0;
 	counterBox.innerHTML = `0`;
 
 	//Cards that were matched before now can be clicked
 	matchedCards = [];
 }
 
-// restart button
+// restart game
 let restartButton = document.querySelector('.restart i');
 restartButton.addEventListener('click', function(){
 	restart();
 	console.log('Restart!');
 })
 
+
+/* 
+* * END GAME * * 
+*/
+function endGame() {
+	clearInterval(timerId);
+	let modal = document.querySelector('.modal span.score');
+	let stars = calculateStars();
+	modal.innerHTML = `With ${moves} Moves, ${stars} Stars in ${timer.textContent}`;
+
+	console.log('You won!');
+}
 
 window.onload = restart;
 
