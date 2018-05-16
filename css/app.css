@@ -63,10 +63,11 @@ h1 {
     justify-content: center;
     align-items: center;
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
+    transition: transform 0.4s ease;
+    transform-style: preserve-3d; 
 }
 
 .deck .card.open {
-    transform: rotateY(0);
     background: #02b3e4;
     cursor: pointer;
 }
@@ -79,7 +80,55 @@ h1 {
     cursor: default;
     background: #02ccba;
     font-size: 33px;
+    animation: rubberBand 0.55s;
 }
+
+/* https://codepen.io/levineuland/pen/AmwCL */
+@keyframes rubberBand {
+    0% {
+        transform: scale(1);
+    }
+    30% {
+        transform: scaleX(1.25) scaleY(0.75);
+    }
+    40% {
+        transform: scaleX(0.75) scaleY(1.25);
+    }
+    60% {
+        transform: scaleX(1.15) scaleY(0.85);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.deck .card.unmatch {
+
+    cursor: default;
+    font-size: 33px;
+    background: #EF2929;
+    animation: shake 0.55s;
+}
+
+/* https://codepen.io/levineuland/pen/AmwCL */
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
 
 /*
  * Styles for the Score Panel
@@ -144,6 +193,10 @@ h1 {
     box-shadow: 0 0 0 10px #ffffff;
 }
 
+.modal-container.show .modal {
+    animation: modal .3s;
+}
+
 @keyframes modal {
     from {
         opacity: 0;
@@ -156,6 +209,3 @@ h1 {
     }
 }
 
-.modal-container.show .modal {
-    animation: modal .3s;
-}
