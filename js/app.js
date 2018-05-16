@@ -102,7 +102,6 @@ function showStars() {
 }
 
 function calculateStars() {
-	debugger;
 	if (moves >= 0 && moves < 12) {
 		return 3;
 	} else if (moves < 22) {
@@ -177,11 +176,14 @@ function match(secondCardOpened){
 */
 function unmatch(secondCardOpened){
 	console.log('no match!');
+	let cardElements = document.querySelectorAll('li.card');
+	cardElements[firstCardOpened].classList.add('unmatch');
+	cardElements[secondCardOpened].classList.add('unmatch');
+
 	showingUnmatchedCards = true;
 	setTimeout(function(){
-		let cardElements = document.querySelectorAll('li.card');
-        cardElements[firstCardOpened].classList.remove('show', 'open');
-        cardElements[secondCardOpened].classList.remove('show', 'open');
+        cardElements[firstCardOpened].classList.remove('show', 'open', 'unmatch');
+        cardElements[secondCardOpened].classList.remove('show', 'open', 'unmatch');
         firstCardOpened = null;
         showingUnmatchedCards = false;
     },1100);
@@ -256,6 +258,11 @@ function endGame() {
 
 window.onload = restart;
 
+
+/* 
+* * PLAY AGAIN BUTTON * * 
+*/
+//BUG - stars only return to after card is clicked and not when the button is clicked
 const playAgainButton = document.querySelector('.button');
 playAgainButton.addEventListener('click', function() {
 	restart();
