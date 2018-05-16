@@ -4,7 +4,7 @@
 
 // list of symbols used: 8
 let symbols = ['diamond', 'paper-plane-o', 'anchor', 'bolt', 'cube', 'leaf', 'bicycle', 'bomb'];
-// TESTE PARA END GAME >>> RETIRAR APÓS TESTE
+// TESTE PARA END GAME >>> Remove after test
 //symbols = ['diamond', 'anchor'];
 // cards of the deck: 16
 let cards = [...symbols, ...symbols];
@@ -32,7 +32,6 @@ let starPanel = document.querySelectorAll('ul.stars li i');
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
-
 
 /* 
 * * SHUFFLE CARDS * * 
@@ -73,7 +72,6 @@ function scheduleTimer(){
 /* 
 * * COUNTER * * 
 */
-//old counter()
 function countMove(){
 	moves++;
 	counterBox.innerHTML = moves;
@@ -83,7 +81,6 @@ function countMove(){
 /* 
 * * STAR RATING * * 
 */
-
 function showStars() {
 	starPanel[2].setAttribute('class', 'fa fa-star');
 	starPanel[1].setAttribute('class', 'fa fa-star');
@@ -104,7 +101,6 @@ function showStars() {
 	}
 }
 
-
 function calculateStars() {
 	debugger;
 	if (moves >= 0 && moves < 12) {
@@ -122,7 +118,6 @@ function calculateStars() {
 /* 
 * * CLICK * * 
 */
-
 function onCardClick(e, index){
 	if (!timerStarted) {
 		// timer starts
@@ -235,20 +230,38 @@ restartButton.addEventListener('click', function(){
 	console.log('Restart!');
 })
 
+/* 
+* * MODAL * * 
+*/
+
+function showModal() {
+	const modal = document.getElementById('modal-endgame');
+	modal.classList.add('show');
+}
+
 
 /* 
 * * END GAME * * 
 */
 function endGame() {
 	clearInterval(timerId);
-	let modal = document.querySelector('.modal span.score');
+	showModal();
+
+	let modalScore = document.querySelector('.modal span.score');
 	let stars = calculateStars();
-	modal.innerHTML = `With ${moves} Moves, ${stars} Stars in ${timer.textContent}`;
+	modalScore.innerHTML = `With ${moves} Moves, ${stars} Stars in ${timer.textContent}`;
 
 	console.log('You won!');
 }
 
 window.onload = restart;
+
+const playAgainButton = document.querySelector('.button');
+playAgainButton.addEventListener('click', function() {
+	restart();
+	const modal = document.getElementById('modal-endgame');
+	modal.classList.remove('show');
+});
 
 
 /*
