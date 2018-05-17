@@ -136,9 +136,12 @@ h1 {
  */
 
 .score-panel {
-    text-align: left;
-    width: 345px;
-    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 10px 22px;
+    font-size: 1.4em;
 }
 
 .score-panel .stars {
@@ -146,6 +149,7 @@ h1 {
     padding: 0;
     display: inline-block;
     margin: 0 5px 0 0;
+    color: orange;
 }
 
 .score-panel .stars li {
@@ -154,13 +158,20 @@ h1 {
 }
 
 #timer {
+    width: 70px;
     display: inline-block;
-    margin: 0 0 0 145px;
+    margin: 0 5px 0 70px;
 }
 
 .score-panel .restart {
     float: right;
     cursor: pointer;
+}
+
+.score-panel .restart:hover {
+    transition: all 0.65s ease;
+    transform: rotateZ(360deg);
+    color: gray;
 }
 
 
