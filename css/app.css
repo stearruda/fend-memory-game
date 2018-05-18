@@ -17,7 +17,8 @@ body {
 }
 
 body {
-    background: #ffffff url('../img/geometry2.png'); /* Background pattern from Subtle Patterns */
+    /* Mudar background para um de efeito de madeira. Como se fossem cartas na mesa */
+    background: #ffffff url('../img/purty_wood.png'); /* Background pattern from Subtle Patterns */
     font-family: 'Coda', cursive;
 }
 
@@ -42,7 +43,7 @@ h1 {
 .deck {
     max-width: 660px;
     min-height: 680px;
-    background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
+    background-color: #ffffff;
     padding: 32px;
     border-radius: 10px;
     box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
@@ -200,15 +201,28 @@ h1 {
 
 .modal {
     background: #ffffff;
-    width: 60%;
-    min-width: 300px;
-    padding: 40px;
+    width: 45%;
+    min-width: 250px;
+    padding: 35px;
     border: 10px solid #02ccba;
     box-shadow: 0 0 0 10px #ffffff;
+    font-size: 1.3em;
+    text-align: center;
+
 }
 
 .modal-container.show .modal {
     animation: modal .3s;
+}
+
+input.button {
+    box-shadow: 2px 3px 18px 0 rgba(46, 61, 73, 0.5);
+    background-color: black;
+    color: white;
+    font-family: 'Bungee', cursive;
+    cursor: pointer;
+    border: 5px solid black;
+    border-radius: 6px;
 }
 
 @keyframes modal {
