@@ -24,7 +24,7 @@
         		<li><i class="fa fa-star"></i></li>
         	</ul>
 
-        	<p><span class="moves">0 </span> Moves</p>
+        	<p>Moves <span class="moves"></span></p>
 
             <div class="restart-panel">
                 <p id="timer">00 : 00</p>
@@ -42,8 +42,11 @@
     <div id="modal-endgame" class="modal-container">
         <div class="modal">
             <h3>Congratulations! You Won!</h3>
-            <span class="score"></span>
-            <p>Woooooooo!</p>
+            <div class="modal-score">
+                <p class="modal-stars"></p>
+                <p class="modal-moves"></p>
+                <p class="modal-time"></p>
+            </div>
             <input type="button" class="button" value="Play again!">
         </div>
     </div>
