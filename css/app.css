@@ -32,7 +32,7 @@ body {
 h1 {
     font-family: 'Bungee', cursive;
     font-weight: 300;
-    font-size: 7vw;
+    font-size: 10vw;
     margin: 30px 0 0;
 }
 
@@ -42,21 +42,21 @@ h1 {
 
 .deck {
     max-width: 660px;
-    min-height: 680px;
+    min-height: 380px;
     background-color: #ffffff;
-    padding: 32px;
+    padding: 1px;
     border-radius: 10px;
     box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
-    margin: 0 20px;
+    margin: 0 10px;
 }
 
 .deck .card {
-    height: 125px;
-    width: 125px;
+    height: 63px;
+    width: 63px;
     background: #2e3d49;
     font-size: 0;
     color: #ffffff;
@@ -164,7 +164,7 @@ h1 {
 #timer {
     width: 70px;
     display: inline-block;
-    margin: 0 5px 0 70px;
+    margin: 0 5px 0 15px;
 }
 
 .score-panel .restart {
@@ -256,6 +256,7 @@ input.button {
  * Media Queries
  */
 
+/*
 @media (max-width: 420px) {
     .deck .card {
         width: 120px;
@@ -270,4 +271,53 @@ input.button {
     .deck .card {
         min-width: 200px;
     }   
+}
+*/
+
+@media (min-width: 380px) {
+    #timer {
+        margin: 0 5px 0 70px;
+    }
+}
+
+@media (min-width: 386px) and (max-width: 471px) {
+    .deck .card {
+        height: 80px;
+        width: 80px;
+    }
+
+    #timer {
+        margin: 0 5px 0 70px;
+    }
+}
+
+@media (min-width: 472px) and (max-width: 560px) {
+    .deck .card {
+        height: 98px;
+        width: 98px;
+    }
+}
+
+@media (min-width: 561px) and (max-width: 656px) {
+    .deck .card {
+        height: 117px;
+        width: 117px;
+    }
+}
+
+@media (min-width: 657px) {
+    .deck {
+        min-height: 680px;
+        padding: 30px;
+        margin: 0 20px;
+    }
+
+    .deck .card {
+        height: 125px;
+        width: 125px;
+    }
+
+    h1 {
+        font-size: 5em;
+    }
 }
