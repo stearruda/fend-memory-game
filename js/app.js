@@ -1,19 +1,12 @@
 /*
  * GLOBAL VARIABLES
  */
-// TESTE PARA END GAME >>> Remove after test
-//symbols = ['diamond', 'anchor'];
-// cards of the deck: 16
-let cards;
-// 
+let cards; 
 let firstCardOpened;
 // check if we are showing an unmatched pair to the user
 let showingPairResult = false;
-//
 let matchedCards;
-//
 let moves;
-//
 let timerId;
 
 
@@ -30,11 +23,9 @@ function restartGame(){
 }
 
 function setUpButtonEvents(){
-	
 	const restartButton = document.querySelector('.restart i');
 	restartButton.addEventListener('click', function(){
 		restartGame();
-		console.log('Restart!');
 	})
 
 	const playAgainButton = document.querySelector('.button');
@@ -55,19 +46,10 @@ window.onload = initGame;
 
 function createCards(){
 	const symbols = ['diamond', 'paper-plane-o', 'anchor', 'bolt', 'cube', 'leaf', 'bicycle', 'bomb'];
-	// TESTE PARA END GAME >>> Remove after test
-	//const symbols = ['diamond', 'anchor'];
 	cards = [...symbols, ...symbols];
 	cards = shuffle(cards);
 }
 
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
 
 /* 
 * * SHUFFLE CARDS * * 
@@ -97,7 +79,6 @@ function showTime(min, sec){
 
 function scheduleTimerIfNeeded(){
 	if (timerId === null) {
-		// timer starts
 		let min = 0;
 		let sec = 0;
 		timerId = setInterval(function(){
@@ -117,10 +98,10 @@ function clearTimer(){
 	timerId = null;
 }
 
-/* 
-* * Move COUNTER * * 
-*/
 
+/* 
+* * MOVE COUNTER * * 
+*/
 function showMoves(){
 	const counterBox = document.querySelector('.score-panel span.moves');
 	counterBox.innerHTML = moves;
@@ -135,6 +116,7 @@ function clearMoves(){
 	moves = 0;
 	showMoves();
 }
+
 
 /* 
 * * STAR RATING * * 
@@ -173,7 +155,6 @@ function calculateStars() {
 }
 
 
-
 /* 
 * * CLICK * * 
 */
@@ -199,7 +180,6 @@ function tryToMatch(firstCardIndex, secondCardIndex){
 		match(firstCardIndex, secondCardIndex);
 	} else {
 		unmatch(firstCardIndex, secondCardIndex);
-		// counts the moves
 		countMove();
 	}
 }
@@ -254,7 +234,6 @@ function match(firstCardIndex, secondCardIndex){
 * * UNMATCH * * 
 */
 function unmatch(firstCardIndex, secondCardIndex){
-	console.log('no match!');
 	let cardElements = document.querySelectorAll('li.card');
 	cardElements[firstCardIndex].classList.add('unmatch');
 	cardElements[secondCardIndex].classList.add('unmatch');
@@ -285,7 +264,6 @@ function createDeck(){
 	}
 }
 
-
 function resetMatchedCards(){
 	matchedCards = [];
 	firstCardOpened = null;
@@ -295,7 +273,6 @@ function resetMatchedCards(){
 /* 
 * * MODAL * * 
 */
-
 function showModal() {
 	const modal = document.getElementById('modal-endgame');
 	modal.classList.add('show');
@@ -317,18 +294,4 @@ function endGame() {
 	modalMoves.innerHTML = `Moves ${moves}`;
 	modalStars.innerHTML = `${stars} Stars`;
 	modalTime.innerHTML = `${timer.textContent}`;
-
-	console.log('You won!');
 }
-
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
