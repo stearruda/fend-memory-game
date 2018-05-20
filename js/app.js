@@ -8,37 +8,58 @@ let cards;
 // 
 let firstCardOpened;
 // check if we are showing an unmatched pair to the user
-let showingUnmatchedCards;
+let showingPairResult = false;
 //
 let matchedCards;
 //
 let moves;
 //
-let timerStarted;
-//
 let timerId;
-//
-let starPanel;
 
+
+/* 
+* * START/RESET Game * * 
+*/
+function restartGame(){
+	createCards();
+	resetMatchedCards();
+	createDeck();
+	clearMoves();
+	clearTimer();
+	showStars();
+}
+
+function setUpButtonEvents(){
+	
+	const restartButton = document.querySelector('.restart i');
+	restartButton.addEventListener('click', function(){
+		restartGame();
+		console.log('Restart!');
+	})
+
+	const playAgainButton = document.querySelector('.button');
+	playAgainButton.addEventListener('click', function() {
+		restartGame();
+		const modal = document.getElementById('modal-endgame');
+		modal.classList.remove('show');
+	});
+}
 
 function initGame(){
-	// list of symbols used: 8
-	let symbols = ['diamond', 'paper-plane-o', 'anchor', 'bolt', 'cube', 'leaf', 'bicycle', 'bomb'];
-	// TESTE PARA END GAME >>> Remove after test
-	symbols = ['diamond', 'anchor'];
-	cards = [...symbols, ...symbols];
-	firstCardOpened = null;
-	// check if we are showing an unmatched pair to the user
-	showingUnmatchedCards = false;
-	matchedCards = [];
-	moves = 0;
-	timerStarted = false;
-	starPanel = document.querySelectorAll('ul.stars li i');
-
-	restart();
+	setUpButtonEvents();
+	restartGame();
 }
 
 window.onload = initGame;
+
+
+function createCards(){
+	const symbols = ['diamond', 'paper-plane-o', 'anchor', 'bolt', 'cube', 'leaf', 'bicycle', 'bomb'];
+	// TESTE PARA END GAME >>> Remove after test
+	//const symbols = ['diamond', 'anchor'];
+	cards = [...symbols, ...symbols];
+	cards = shuffle(cards);
+}
 
 
 /*
@@ -70,28 +91,41 @@ function shuffle(array) {
 /* 
 * * TIMER * * 
 */
-function scheduleTimer(){
-	let min = 0;
-	let sec = 0;
-	timerId = setInterval(function(){
-    	document.getElementById('timer').innerHTML = `${('0' + min).slice(-2)} : ${('0' + sec).slice(-2)}`;
-    	sec++;
-    	if (sec > 59) {
-        	sec = 0;
-        	min++;
-    	}
-	}, 1000);
+function showTime(min, sec){
+	document.getElementById('timer').innerHTML = `${('0' + min).slice(-2)} : ${('0' + sec).slice(-2)}`;	    	
 }
 
+function scheduleTimerIfNeeded(){
+	if (timerId === null) {
+		// timer starts
+		let min = 0;
+		let sec = 0;
+		timerId = setInterval(function(){
+	    	sec++;
+	    	if (sec > 59) {
+	        	sec = 0;
+	        	min++;
+	    	}
+	    	showTime(min, sec);
+		}, 1000);
+	} 
+}
+
+function clearTimer(){
+	clearInterval(timerId);
+	showTime(0, 0);
+	timerId = null;
+}
+
+/* 
+* * Move COUNTER * * 
+*/
 
 function showMoves(){
 	const counterBox = document.querySelector('.score-panel span.moves');
 	counterBox.innerHTML = moves;
 }
 
-/* 
-* * COUNTER * * 
-*/
 function countMove(){
 	moves++;
 	showMoves();
@@ -106,6 +140,7 @@ function clearMoves(){
 * * STAR RATING * * 
 */
 function showStars() {
+	const starPanel = document.querySelectorAll('ul.stars li i');
 	starPanel[2].setAttribute('class', 'fa fa-star');
 	starPanel[1].setAttribute('class', 'fa fa-star');
 	starPanel[0].setAttribute('class', 'fa fa-star');
@@ -138,80 +173,100 @@ function calculateStars() {
 }
 
 
+
 /* 
 * * CLICK * * 
 */
 function onCardClick(e, index){
-	if (!timerStarted) {
-		// timer starts
-		scheduleTimer();
-		timerStarted = true;
-	} 
-
-	if (!matchedCards.includes(index)) {
-		if(showingUnmatchedCards === false) {
-			if (firstCardOpened != index) {
-				e.target.classList.toggle('open');
-				e.target.classList.toggle('show');
-				if (firstCardOpened != null) {
-					if (cards[index] === cards[firstCardOpened]) {
-						match(index);
-					} else {
-						unmatch(index);
-						// counts the moves
-						countMove();
-						console.log(`${moves} moves`);
-					}
-				} else {
-					firstCardOpened = index;
-				}
-			}
-		}
+	const cardStillNotMatched = !matchedCards.includes(index);
+	const notShowingAnimation = showingPairResult === false;
+	const sameCardClicked = firstCardOpened === index;
+	const shouldHandleClick = cardStillNotMatched && notShowingAnimation && !sameCardClicked;  
+	if (shouldHandleClick) {
+		scheduleTimerIfNeeded();
+		openCard(e.target);
+		handleCardClick(e, index);
 	}
+}
 
-	// how many stars during the game
-	showStars();
+function openCard(cardElement){
+	cardElement.classList.add('open', 'show');
+}
 
-	//ending game
-	if (matchedCards.length === cards.length) {
+function tryToMatch(firstCardIndex, secondCardIndex){
+	const symbolsMatch = cards[firstCardIndex] === cards[secondCardIndex]; 
+	if (symbolsMatch) {
+		match(firstCardIndex, secondCardIndex);
+	} else {
+		unmatch(firstCardIndex, secondCardIndex);
+		// counts the moves
+		countMove();
+	}
+}
+
+function checkEndGame(){
+	const allCardsAreMatched = matchedCards.length === cards.length; 
+	if (allCardsAreMatched) {
 		endGame();
 	}
+}
+
+function handleCardClick(e, index){
+	const oneCardIsAlreadyOpened = firstCardOpened != null; 
+	if (oneCardIsAlreadyOpened) {
+		tryToMatch(firstCardOpened, index);
+	} else {
+		firstCardOpened = index;
+	}
+	showStars();
+	checkEndGame();	
 }
 
 
 /* 
 * * MATCH * * 
 */
-function match(secondCardOpened){
-	console.log('match!');
-	let cardElements = document.querySelectorAll('li.card');
-	cardElements[firstCardOpened].classList.add('match');
-	cardElements[secondCardOpened].classList.add('match');
-	cardElements[firstCardOpened].classList.remove('show', 'open');
-	cardElements[secondCardOpened].classList.remove('show', 'open');
-	matchedCards.push(firstCardOpened);
-	matchedCards.push(secondCardOpened);
+function initNewComparison(){
 	firstCardOpened = null;
+}
+
+function animateMatch(firstCardIndex, secondCardIndex){
+	const cardElements = document.querySelectorAll('li.card');
+	const firstCardClasses = cardElements[firstCardIndex].classList; 
+	firstCardClasses.add('match');
+	firstCardClasses.remove('show', 'open');
+
+	const secondCardClasses = cardElements[secondCardIndex].classList; 
+	secondCardClasses.add('match');
+	secondCardClasses.remove('show', 'open');
+}
+
+function match(firstCardIndex, secondCardIndex){
+	matchedCards.push(firstCardIndex);
+	matchedCards.push(secondCardIndex);
+
+	animateMatch(firstCardIndex, secondCardIndex);
+	initNewComparison();	
 }
 
 
 /* 
 * * UNMATCH * * 
 */
-function unmatch(secondCardOpened){
+function unmatch(firstCardIndex, secondCardIndex){
 	console.log('no match!');
 	let cardElements = document.querySelectorAll('li.card');
-	cardElements[firstCardOpened].classList.add('unmatch');
-	cardElements[secondCardOpened].classList.add('unmatch');
+	cardElements[firstCardIndex].classList.add('unmatch');
+	cardElements[secondCardIndex].classList.add('unmatch');
 
-	showingUnmatchedCards = true;
+	showingPairResult = true;
 	setTimeout(function(){
-        cardElements[firstCardOpened].classList.remove('show', 'open', 'unmatch');
-        cardElements[secondCardOpened].classList.remove('show', 'open', 'unmatch');
-        firstCardOpened = null;
-        showingUnmatchedCards = false;
+        cardElements[firstCardIndex].classList.remove('show', 'open', 'unmatch');
+        cardElements[secondCardIndex].classList.remove('show', 'open', 'unmatch');        
+        showingPairResult = false;
     },1100);
 
+	initNewComparison();
 }
 
 function createDeck(){
@@ -230,34 +285,12 @@ function createDeck(){
 	}
 }
 
-function clearTimer(){
-	clearInterval(timerId);
-	document.getElementById('timer').innerHTML = `00 : 00`;
-	timerStarted = false;
-}
 
 function resetMatchedCards(){
 	matchedCards = [];
+	firstCardOpened = null;
 }
 
-/* 
-* * RESET/START * * 
-*/
-function restart(){
-	resetMatchedCards();
-	cards = shuffle(cards);
-	clearMoves();
-	clearTimer();
-	createDeck();
-	showStars();
-}
-
-// restart game
-let restartButton = document.querySelector('.restart i');
-restartButton.addEventListener('click', function(){
-	restart();
-	console.log('Restart!');
-})
 
 /* 
 * * MODAL * * 
@@ -287,18 +320,6 @@ function endGame() {
 
 	console.log('You won!');
 }
-
-
-
-/* 
-* * PLAY AGAIN BUTTON * * 
-*/
-const playAgainButton = document.querySelector('.button');
-playAgainButton.addEventListener('click', function() {
-	restart();
-	const modal = document.getElementById('modal-endgame');
-	modal.classList.remove('show');
-});
 
 
 /*
