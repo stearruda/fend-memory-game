@@ -17,7 +17,6 @@ body {
 }
 
 body {
-    /* Mudar background para um de efeito de madeira. Como se fossem cartas na mesa */
     background: #ffffff url('../img/purty_wood.png'); /* Background pattern from Subtle Patterns */
     font-family: 'Coda', cursive;
 }
@@ -39,7 +38,6 @@ h1 {
 /*
  * Styles for the deck of cards
  */
-
 .deck {
     max-width: 660px;
     min-height: 380px;
@@ -87,7 +85,7 @@ h1 {
     animation: rubberBand 0.55s;
 }
 
-/* https://codepen.io/levineuland/pen/AmwCL */
+/* Based on: https://codepen.io/levineuland/pen/AmwCL */
 @keyframes rubberBand {
     0% {
         transform: scale(1);
@@ -114,7 +112,7 @@ h1 {
     animation: shake 0.55s;
 }
 
-/* https://codepen.io/levineuland/pen/AmwCL */
+/* Based on: https://codepen.io/levineuland/pen/AmwCL */
 @keyframes shake {
   10%, 90% {
     transform: translate3d(-1px, 0, 0);
@@ -137,7 +135,6 @@ h1 {
 /*
  * Styles for the Score Panel
  */
-
 .score-panel {
     display: flex;
     justify-content: center;
@@ -183,6 +180,7 @@ h1 {
  * Styles for Modal
  */
 
+ /* Modal Based on: https://www.youtube.com/watch?v=fu-enUG2VEE&t=1191s */
 .modal-container {
     width: 100vw;
     height: 100vh;
@@ -215,6 +213,18 @@ h1 {
     animation: modal .3s;
 }
 
+@keyframes modal {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -60px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+
+    }
+}
+
 .modal h3 {
     margin: 0;
 }
@@ -239,41 +249,10 @@ input.button {
     border-radius: 6px;
 }
 
-@keyframes modal {
-    from {
-        opacity: 0;
-        transform: translate3d(0, -60px, 0);
-    }
-    to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-
-    }
-}
-
 
 /*
  * Media Queries
  */
-
-/*
-@media (max-width: 420px) {
-    .deck .card {
-        width: 120px;
-    }   
-}
-
-@media (max-width: 375px) {
-    h1 {
-        font-size: 2em;
-    }
-
-    .deck .card {
-        min-width: 200px;
-    }   
-}
-*/
-
 @media (min-width: 380px) {
     #timer {
         margin: 0 5px 0 70px;
