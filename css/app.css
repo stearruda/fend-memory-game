@@ -148,8 +148,9 @@ h1 {
 }
 
 .score-panel .stars {
-    margin: 0;
-    padding: 0;
+    background-color: #000000;
+    padding: 3px;
+    border-radius: 8px;
     display: inline-block;
     margin: 0 5px 0 0;
     color: orange;
@@ -203,16 +204,29 @@ h1 {
     background: #ffffff;
     width: 45%;
     min-width: 250px;
-    padding: 35px;
+    padding: 28px;
     border: 10px solid #02ccba;
     box-shadow: 0 0 0 10px #ffffff;
     font-size: 1.3em;
     text-align: center;
-
 }
 
 .modal-container.show .modal {
     animation: modal .3s;
+}
+
+.modal h3 {
+    margin: 0;
+}
+
+.modal p {
+    margin: 0 15px 10px 10px;
+    display: inline-block;
+}
+
+.modal p:first-child {
+    margin: 33px 0;
+    display: block;
 }
 
 input.button {
