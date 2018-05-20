@@ -249,9 +249,14 @@ function endGame() {
 	clearInterval(timerId);
 	showModal();
 
-	let modalScore = document.querySelector('.modal span.score');
+	let modalMoves = document.querySelector('.modal-moves');
+	let modalStars = document.querySelector('.modal-stars');
+	let modalTime = document.querySelector('.modal-time');
 	let stars = calculateStars();
-	modalScore.innerHTML = `With ${moves} Moves, ${stars} Stars in ${timer.textContent}`;
+
+	modalMoves.innerHTML = `Moves ${moves}`;
+	modalStars.innerHTML = `${stars} Stars`;
+	modalTime.innerHTML = `${timer.textContent}`;
 
 	console.log('You won!');
 }
@@ -262,12 +267,12 @@ window.onload = restart;
 /* 
 * * PLAY AGAIN BUTTON * * 
 */
-//BUG - stars only return to after card is clicked and not when the button is clicked
 const playAgainButton = document.querySelector('.button');
 playAgainButton.addEventListener('click', function() {
 	restart();
 	const modal = document.getElementById('modal-endgame');
 	modal.classList.remove('show');
+	showStars();
 });
 
 
