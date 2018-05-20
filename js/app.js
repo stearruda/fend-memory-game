@@ -1,29 +1,44 @@
 /*
  * GLOBAL VARIABLES
  */
-
-// list of symbols used: 8
-let symbols = ['diamond', 'paper-plane-o', 'anchor', 'bolt', 'cube', 'leaf', 'bicycle', 'bomb'];
 // TESTE PARA END GAME >>> Remove after test
 //symbols = ['diamond', 'anchor'];
 // cards of the deck: 16
-let cards = [...symbols, ...symbols];
+let cards;
 // 
-let firstCardOpened = null;
+let firstCardOpened;
 // check if we are showing an unmatched pair to the user
-let showingUnmatchedCards = false;
+let showingUnmatchedCards;
 //
-let matchedCards = [];
+let matchedCards;
 //
-let counterBox = document.querySelector('.score-panel span.moves');
+let moves;
 //
-let moves = 0;
-//
-let timerStarted = false;
+let timerStarted;
 //
 let timerId;
 //
-let starPanel = document.querySelectorAll('ul.stars li i');
+let starPanel;
+
+
+function initGame(){
+	// list of symbols used: 8
+	let symbols = ['diamond', 'paper-plane-o', 'anchor', 'bolt', 'cube', 'leaf', 'bicycle', 'bomb'];
+	// TESTE PARA END GAME >>> Remove after test
+	symbols = ['diamond', 'anchor'];
+	cards = [...symbols, ...symbols];
+	firstCardOpened = null;
+	// check if we are showing an unmatched pair to the user
+	showingUnmatchedCards = false;
+	matchedCards = [];
+	moves = 0;
+	timerStarted = false;
+	starPanel = document.querySelectorAll('ul.stars li i');
+
+	restart();
+}
+
+window.onload = initGame;
 
 
 /*
@@ -69,14 +84,23 @@ function scheduleTimer(){
 }
 
 
+function showMoves(){
+	const counterBox = document.querySelector('.score-panel span.moves');
+	counterBox.innerHTML = moves;
+}
+
 /* 
 * * COUNTER * * 
 */
 function countMove(){
 	moves++;
-	counterBox.innerHTML = moves;
+	showMoves();
 }
 
+function clearMoves(){
+	moves = 0;
+	showMoves();
+}
 
 /* 
 * * STAR RATING * * 
@@ -190,16 +214,9 @@ function unmatch(secondCardOpened){
 
 }
 
-
-/* 
-* * RESET/START * * 
-*/
-function restart(){
-	cards = shuffle(cards);
-	//console.log(shuffledCards);
+function createDeck(){
 	let deckUl = document.querySelector('ul.deck');
 	deckUl.innerHTML = '';
-
 	for (let i = 0; i < cards.length; i++){
 		let card = cards[i];
 		let cardLi = document.createElement('li');
@@ -211,18 +228,28 @@ function restart(){
 		cardLi.addEventListener('click', cardClicked);
 		deckUl.appendChild(cardLi);
 	}
+}
 
-	//clear timer
+function clearTimer(){
 	clearInterval(timerId);
 	document.getElementById('timer').innerHTML = `00 : 00`;
 	timerStarted = false;
+}
 
-	//clear moves
-	moves = 0;
-	counterBox.innerHTML = `0`;
-
-	//Cards that were matched before now can be clicked
+function resetMatchedCards(){
 	matchedCards = [];
+}
+
+/* 
+* * RESET/START * * 
+*/
+function restart(){
+	resetMatchedCards();
+	cards = shuffle(cards);
+	clearMoves();
+	clearTimer();
+	createDeck();
+	showStars();
 }
 
 // restart game
@@ -261,7 +288,6 @@ function endGame() {
 	console.log('You won!');
 }
 
-window.onload = restart;
 
 
 /* 
@@ -272,7 +298,6 @@ playAgainButton.addEventListener('click', function() {
 	restart();
 	const modal = document.getElementById('modal-endgame');
 	modal.classList.remove('show');
-	showStars();
 });
 
 
