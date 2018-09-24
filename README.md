@@ -20,7 +20,7 @@
 
 ## Live Game
 
-Play [here](https://stearruda.github.io/memory-game)
+Play [here](https://stearruda.github.io/fend-memory-game)
 
 ## How The Game Works
 
